@@ -1,0 +1,1 @@
+# festbot-notificator
