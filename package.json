@@ -1,0 +1,23 @@
+{
+  "name": "festbot-notificator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Festbot/festbot-notificator.git"
+  },
+  "author": "Andor Polgar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Festbot/festbot-notificator/issues"
+  },
+  "homepage": "https://github.com/Festbot/festbot-notificator#readme",
+  "dependencies": {
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
