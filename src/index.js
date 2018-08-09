@@ -1,13 +1,17 @@
 const { getAllDocs, getDoc, createDocWithId, updateDoc } = require('./dataProviders/couchdb');
 const request = require('request-promise');
+const express = require('express');
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 const sendNotification = async function(psid, message) {
 	const options = {
-		url: 'https://chatbot.festbot.com/send-notification',
+		url: 'https://' + process.env.CHATBOT_HOST + '/send-notification',
 		json: {
 			accessToken: process.env.FESTBOT_ACCESS_TOKEN,
 			message,
@@ -154,3 +158,11 @@ setInterval(async function() {
 	await queueNotifications();
 	await sendOutNotifications();
 }, 5 * MINUTE);
+
+app.get('/', function(req, res) {
+	res.send('Mukodik!!11');
+});
+
+app.listen(PORT, function() {
+	console.log('Festbot Notificatior is listening on port ' + PORT);
+});
