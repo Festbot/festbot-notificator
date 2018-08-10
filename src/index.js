@@ -48,11 +48,6 @@ const getUsers = async function() {
 	return userData.rows.map(user => user.doc);
 };
 
-const getEvents = async function() {
-	const eventData = await getAllDocs('events');
-	return eventData.rows.map(event => event.doc);
-}
-
 const getNotifications = async function() {
 	const notifications = await getAllDocs('notifications');
 	return notifications.rows.map(notification => notification.doc);
