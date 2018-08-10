@@ -1,6 +1,7 @@
 const { getAllDocs, getDoc, createDocWithId, updateDoc } = require('./dataProviders/couchdb');
 const request = require('request-promise');
 const express = require('express');
+const moment = require('moment');
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -46,6 +47,11 @@ const getUsers = async function() {
 	const userData = await getAllDocs('users');
 	return userData.rows.map(user => user.doc);
 };
+
+const getEvents = async function() {
+	const eventData = await getAllDocs('events');
+	return eventData.rows.map(event => event.doc);
+}
 
 const getNotifications = async function() {
 	const notifications = await getAllDocs('notifications');
@@ -135,13 +141,13 @@ async function sendOutNotifications() {
 		const stage = await getStageData(notification.stageId);
 		const user = await getUserData(notification.userId);
 
-		if (user.firstName !== 'Andor') {
-			return;
-		}
+		// if (user.firstName !== 'Andor') {
+		// 	return;
+		// }
 
-		if (timeUntilStart < 1 * HOUR) {
+		if (timeUntilStart < 1 * (HOUR / 2)) {
 			await updateNotification(notification);
-			await sendNotification(user.psid, `Csak szólok, hogy ${artist.name} 1 órán belül kezd itt: ${stage.name} 😎`);
+			await sendNotification(user.psid, `Csak szólok, hogy ${artist.name} fél órán belül kezd itt: ${stage.name} 😎`);
 			console.log('Notification sent out to', user.firstName, 'about', artist.name);
 		}
 	});
@@ -155,8 +161,8 @@ async function sendOutNotifications() {
 })();
 
 setInterval(async function() {
-	await queueNotifications();
-	await sendOutNotifications();
+ 	await queueNotifications();
+ 	await sendOutNotifications();
 }, 5 * MINUTE);
 
 app.get('/', function(req, res) {

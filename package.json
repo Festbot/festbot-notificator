@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Festbot/festbot-notificator#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "moment": "^2.22.2",
     "request": "^2.87.0",
     "request-promise": "^4.2.2"
   }
