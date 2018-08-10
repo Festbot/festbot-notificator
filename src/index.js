@@ -132,10 +132,6 @@ async function sendOutNotifications() {
 		const stage = await getStageData(notification.stageId);
 		const user = await getUserData(notification.userId);
 
-		if (user.firstName !== 'Andor') {
-		 	return;
-		}
-
 		if (timeUntilStart < 1 * (HOUR / 2)) {
 			await updateNotification(notification);
 			await sendNotification(
