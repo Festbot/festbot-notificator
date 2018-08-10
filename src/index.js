@@ -23,15 +23,10 @@ const sendNotification = async function(psid, message) {
 	return await request.post(options);
 };
 
-const queueNotification = async function({ date, festivalId, stageId, artistId, userId, eventId }) {
+const queueNotification = async function(data) {
 	try {
 		await createDocWithId('notifications', userId + ':' + eventId, {
-			date,
-			festivalId,
-			stageId,
-			artistId,
-			eventId,
-			userId,
+			...data,
 			fired: false
 		});
 	} catch (e) {
@@ -121,7 +116,8 @@ async function queueNotifications() {
 			stageId: event.stageId,
 			date: event.startDate,
 			userId: user._id,
-			eventId: event._id
+			eventId: event._id,
+			debug: `${user.firstName} ${event.artist}`
 		});
 	});
 
@@ -136,13 +132,16 @@ async function sendOutNotifications() {
 		const stage = await getStageData(notification.stageId);
 		const user = await getUserData(notification.userId);
 
-		// if (user.firstName !== 'Andor') {
-		// 	return;
-		// }
+		if (user.firstName !== 'Andor') {
+		 	return;
+		}
 
 		if (timeUntilStart < 1 * (HOUR / 2)) {
 			await updateNotification(notification);
-			await sendNotification(user.psid, `Csak szólok, hogy ${artist.name} fél órán belül kezd itt: ${stage.name} 😎`);
+			await sendNotification(
+				user.psid,
+				`Csak szólok, hogy ${artist.name} fél órán belül kezd itt: ${stage.name} 😎`
+			);
 			console.log('Notification sent out to', user.firstName, 'about', artist.name);
 		}
 	});
@@ -156,8 +155,8 @@ async function sendOutNotifications() {
 })();
 
 setInterval(async function() {
- 	await queueNotifications();
- 	await sendOutNotifications();
+	await queueNotifications();
+	await sendOutNotifications();
 }, 5 * MINUTE);
 
 app.get('/', function(req, res) {
