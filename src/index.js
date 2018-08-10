@@ -25,7 +25,7 @@ const sendNotification = async function(psid, message) {
 
 const queueNotification = async function(data) {
 	try {
-		await createDocWithId('notifications', userId + ':' + eventId, {
+		await createDocWithId('notifications', data.userId + ':' + data.eventId, {
 			...data,
 			fired: false
 		});
